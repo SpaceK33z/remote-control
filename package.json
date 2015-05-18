@@ -1,0 +1,16 @@
+{
+  "name": "remote-control",
+  "version": "0.0.1",
+  "author": "Kees Kluskens <kees@webduck.nl>",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SpaceK33z/remote-control"
+  },
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.12.4",
+    "express": "^4.12.4",
+    "lodash": "^3.8.0"
+  }
+}

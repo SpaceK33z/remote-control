@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Shutdown",
+    "icon": "icons/shutdown.svg",
+    "exec": "shutdown -r now",
+    "confirm": true
+  }, {
+    "name": "Open Spotify",
+    "icon": "icons/spotify.svg",
+    "exec": "open /Applications/Spotify.app"
+  }, {
+    "name": "Open Nothing",
+    "icon": "icons/nothing.svg",
+    "exec": "open /Applications/Spotify23.app"
+  }, {
+    "name": "Spotify Toggle",
+    "icon": "icons/nothing.svg",
+    "exec": "osascript SpotifyPlayPause.scpt",
+    "dir": "/Users/kees/Documents/AppleScripts"
+  }
+]
