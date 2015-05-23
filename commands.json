@@ -1,21 +1,29 @@
 [
   {
     "name": "Shutdown",
-    "icon": "icons/shutdown.svg",
-    "exec": "shutdown -r now",
+    "exec": "osascript -e 'tell app \"System Events\" to shut down'",
+    "confirm": true
+  }, {
+    "name": "Sleep",
+    "exec": "pmset sleepnow",
     "confirm": true
   }, {
     "name": "Open Spotify",
-    "icon": "icons/spotify.svg",
     "exec": "open /Applications/Spotify.app"
   }, {
-    "name": "Open Nothing",
-    "icon": "icons/nothing.svg",
-    "exec": "open /Applications/Spotify23.app"
-  }, {
     "name": "Spotify Toggle",
-    "icon": "icons/nothing.svg",
     "exec": "osascript SpotifyPlayPause.scpt",
     "dir": "/Users/kees/Documents/AppleScripts"
+  }, {
+    "name": "Keynote Next",
+    "exec": "osascript KeynoteNext.scpt",
+    "dir": "/Users/kees/Documents/AppleScripts"
+  }, {
+    "name": "Keynote Previous",
+    "exec": "osascript KeynotePrevious.scpt",
+    "dir": "/Users/kees/Documents/AppleScripts"
+  }, {
+    "name": "Open Plex",
+    "exec": "open \"/Applications/Plex Home Theater.app\""
   }
 ]
