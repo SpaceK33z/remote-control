@@ -10,8 +10,8 @@ var _ = require('lodash');
 var staticFolder = path.join(__dirname, 'static');
 var commandFile = path.join(__dirname, 'commands.json');
 
-// Config
-var port = 3000;
+// Load config.
+require('dotenv').load();
 
 var app = express();
 
@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({
   extended: true,
 }));
 
+// Read and parse commands.json to JS objects.
 var parseCommands = function() {
   var file = fs.readFileSync(commandFile, 'utf8');
 
@@ -30,6 +31,7 @@ var parseCommands = function() {
   return JSON.parse(file);
 };
 
+// Get a command from commands.json.
 var getCommand = function(name) {
   var commands = parseCommands();
 
@@ -76,6 +78,6 @@ app.post('/command', function(req, res) {
 
 app.use(express.static(__dirname, 'static'));
 
-app.listen(port);
+app.listen(process.env.REMOTE_PORT);
 
-console.log('App started at port ' + port);
+console.log('Starting app at port ' + process.env.REMOTE_PORT);
