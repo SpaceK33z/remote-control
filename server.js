@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 var express = require('express');
+var basicAuth = require('basic-auth');
 var path = require('path');
 var bodyParser = require('body-parser');
 var fs = require('fs');
@@ -9,6 +10,29 @@ var _ = require('lodash');
 
 var staticFolder = path.join(__dirname, 'static');
 var commandFile = path.join(__dirname, 'commands.json');
+
+// Some basic authentication for unwanted users.
+var auth = function(req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  }
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  }
+
+  if (
+    user.name === process.env.REMOTE_USER &&
+    user.pass === process.env.REMOTE_PASS
+  ) {
+    return next();
+  } else {
+    return unauthorized(res);
+  }
+};
 
 // Load config.
 require('dotenv').load();
@@ -38,17 +62,17 @@ var getCommand = function(name) {
   return _.first(_.where(commands, { name: name }));
 };
 
-app.get('/', function(req, res) {
+app.get('/', auth, function(req, res) {
   return res.sendFile(path.join(staticFolder, 'index.html'));
 });
 
-app.get('/command', function(req, res) {
+app.get('/command', auth, function(req, res) {
   var commands = parseCommands();
 
   return res.json(commands);
 });
 
-app.post('/command', function(req, res) {
+app.post('/command', auth, function(req, res) {
   console.log('POST to /command.');
 
   var command = getCommand(req.body.name);
