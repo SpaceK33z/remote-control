@@ -40,25 +40,19 @@ var JHR = function(type, url, data, callback) {
 
     JHR('GET', urlRoot + 'command', null, function(payload, xhr) {
       payload.forEach(function(item) {
-        var nodeItem = document.createElement('div');
-        nodeItem.className = 'command-item';
-
-        var nodeLink = document.createElement('a');
-        nodeLink.href = '#';
-        nodeLink.innerText = item.name;
-        nodeLink.className = '_exec';
+        var nodeItem = document.createElement('a');
+        nodeItem.href = '#';
+        nodeItem.innerText = item.name;
+        nodeItem.className = 'command-item _exec';
 
         if (item.confirm) {
-          nodeLink.dataset.confirm = true;
+          nodeItem.dataset.confirm = true;
         }
 
-        nodeItem.appendChild(nodeLink);
         commandsDiv.appendChild(nodeItem);
       });
 
       var links = document.querySelectorAll('._exec');
-
-      console.log(links);
 
       for (var i = 0; i < links.length; i++) {
         links[i].addEventListener('click', onCommandClick, false);
