@@ -8,11 +8,16 @@
     "url": "https://github.com/SpaceK33z/remote-control"
   },
   "main": "server.js",
+  "scripts": {
+    "start": "./node_modules/.bin/forever --minUptime=1000 --spinSleepTime=10000 start server.js",
+    "stop": "./node_modules/.bin/forever stop server.js"
+  },
   "dependencies": {
     "basic-auth": "^1.0.1",
     "body-parser": "^1.12.4",
     "dotenv": "^1.1.0",
     "express": "^4.12.4",
+    "forever": "^0.14.1",
     "lodash": "^3.8.0",
     "normalize.css": "3.0.3"
   }
