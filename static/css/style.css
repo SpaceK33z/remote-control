@@ -47,3 +47,14 @@ header h1 {
   background: #c0392b;
   color: #ecf0f1;
 }
+
+.errors {
+  padding-top: 50px;
+}
+
+.errors p {
+  background: #c0392b;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+}

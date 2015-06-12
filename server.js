@@ -41,8 +41,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(cookieParser());
 
-app.get('/', auth, function(req, res) {
-  console.log(req.cookies);
+app.get('/', function(req, res) {
   return res.sendFile(path.join(staticFolder, 'index.html'));
 });
 
@@ -78,7 +77,7 @@ app.post('/command', auth, function(req, res) {
   });
 });
 
-app.post('/auth', auth, function(req, res) {
+app.post('/auth', function(req, res) {
   console.log('POST to /auth.');
 
   if (req.body.token) {

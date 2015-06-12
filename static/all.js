@@ -189,10 +189,32 @@ var generateUUID = function() {
     });
   };
 
+  var hideErrors = function() {
+    var errorsDiv = document.querySelector('._errors');
+
+    errorsDiv.innerText = '';
+  };
+
+  var showError = function(text) {
+    var nodeError = document.createElement('p');
+    var errorsDiv = document.querySelector('._errors');
+
+    nodeError.innerText = text;
+
+    errorsDiv.appendChild(nodeError);
+    return nodeError;
+  };
+
   var loadCommands = function() {
     var commandsDiv = document.querySelector('._commands');
 
     JHR('GET', urlRoot + 'command', null, function(payload, xhr) {
+      hideErrors();
+
+      if (xhr.status === 401) {
+        return showError('You are not authorized for this.');
+      };
+
       payload.forEach(function(item) {
         var nodeItem = document.createElement('a');
         nodeItem.href = '#';
@@ -229,7 +251,7 @@ var generateUUID = function() {
       console.log('Done', payload, xhr);
 
       if (xhr.status === 204) {
-        // TODO: Show that a request for access is sent.
+        showError('A token has been generated and sent to the server. After this token is authorized, refresh this page.');
         Cookies.set('token', uuid);
       }
     });
