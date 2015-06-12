@@ -1,33 +1,26 @@
 #!/usr/bin/env node
 'use strict';
 var express = require('express');
-var basicAuth = require('basic-auth');
 var path = require('path');
 var bodyParser = require('body-parser');
-var fs = require('fs');
+var cookieParser = require('cookie-parser');
 var exec = require('child_process').exec;
-var _ = require('lodash');
+
+var tokens = require('./api/tokens');
+var commands = require('./api/commands');
 
 var staticFolder = path.join(__dirname, 'static');
-var commandFile = path.join(__dirname, 'commands.json');
+var tokenFile = path.join(__dirname, 'tokens.json');
 
 // Some basic authentication for unwanted users.
 var auth = function(req, res, next) {
   function unauthorized(res) {
-    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
     return res.sendStatus(401);
   }
 
-  var user = basicAuth(req);
+  var currentToken = req.cookies.token;
 
-  if (!user || !user.name || !user.pass) {
-    return unauthorized(res);
-  }
-
-  if (
-    user.name === process.env.REMOTE_USER &&
-    user.pass === process.env.REMOTE_PASS
-  ) {
+  if (currentToken && tokens.isAuthorized(currentToken)) {
     return next();
   } else {
     return unauthorized(res);
@@ -46,38 +39,21 @@ app.use(bodyParser.urlencoded({
   extended: true,
 }));
 
-// Read and parse commands.json to JS objects.
-var parseCommands = function() {
-  var file = fs.readFileSync(commandFile, 'utf8');
-
-  if (!file) {
-    console.log('Error parsing commands.json');
-  }
-
-  return JSON.parse(file);
-};
-
-// Get a command from commands.json.
-var getCommand = function(name) {
-  var commands = parseCommands();
-
-  return _.first(_.where(commands, { name: name }));
-};
+app.use(cookieParser());
 
 app.get('/', auth, function(req, res) {
+  console.log(req.cookies);
   return res.sendFile(path.join(staticFolder, 'index.html'));
 });
 
 app.get('/command', auth, function(req, res) {
-  var commands = parseCommands();
-
-  return res.json(commands);
+  return res.json(commands.parse());
 });
 
 app.post('/command', auth, function(req, res) {
   console.log('POST to /command.');
 
-  var command = getCommand(req.body.name);
+  var command = commands.get(req.body.name);
 
   if (!command) {
     return res.status(404).send('Command not found!');
@@ -100,6 +76,16 @@ app.post('/command', auth, function(req, res) {
       output: stdout || null,
     });
   });
+});
+
+app.post('/auth', auth, function(req, res) {
+  console.log('POST to /auth.');
+
+  if (req.body.token) {
+    tokens.insert(req.body.token);
+
+    return res.sendStatus(204);
+  }
 });
 
 app.use(express.static(__dirname, 'static'));

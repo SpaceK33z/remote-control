@@ -6,7 +6,11 @@ var JHR = function(type, url, data, callback) {
   xhr.setRequestHeader('Content-Type', 'application/json');
 
   xhr.addEventListener('load', function() {
-    xhr.responseJSON = JSON.parse(xhr.responseText);
+    try {
+      xhr.responseJSON = JSON.parse(xhr.responseText);
+    } catch (e) {
+      xhr.responseJSON = false;
+    }
 
     callback(xhr.responseJSON, xhr);
   });
