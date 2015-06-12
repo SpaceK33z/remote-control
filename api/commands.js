@@ -15,7 +15,7 @@ exports.parse = function() {
 };
 
 exports.get =  function(name) {
-  var commands = parseCommands();
+  var commands = this.parse();
 
   return _.first(_.where(commands, { name: name }));
 };
