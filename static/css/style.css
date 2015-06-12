@@ -27,9 +27,8 @@ header h1 {
   display: flex;
   flex-flow: row wrap;
   align-content: stretch;
-  padding-top: 50px;
   width: 100%;
-  height: calc(100vh);
+  height: calc(100vh - 50px);
 }
 
 .command-item {
