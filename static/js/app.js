@@ -81,7 +81,9 @@
 
       if (xhr.status === 204) {
         showError('A token has been generated and sent to the server. After this token is authorized, refresh this page.');
-        Cookies.set('token', uuid);
+
+        // Set cookie that is valid for 2 years.
+        Cookies.set('token', uuid, { expires: 730 });
       }
     });
 
