@@ -87,7 +87,7 @@ app.post('/auth', function(req, res) {
   }
 });
 
-app.use(express.static(__dirname, 'static'));
+app.use('/static', express.static('static'));
 
 app.listen(process.env.REMOTE_PORT);
 

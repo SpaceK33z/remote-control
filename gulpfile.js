@@ -16,11 +16,11 @@ function buildJavascript() {
 }
 
 function watch() {
-    gulp.watch(jsFiles, buildJavascript);
+    return gulp.watch(jsFiles, buildJavascript);
 }
 
 function devServer() {
-    nodemon({
+    return nodemon({
         script: 'server.js',
         ignore: ['static/*']
     });
